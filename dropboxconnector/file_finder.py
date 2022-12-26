@@ -51,6 +51,4 @@ def index():
 
 
 if __name__ == "__main__":
-    # client = create_client()
-    # sync_files_from_dropbox(client, "D:\LocalRepo")
     app.run()
