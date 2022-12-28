@@ -13,7 +13,8 @@
 
 ## Non-Goals 
 
-> * Not meant for production use.
+> * Not meant for production use and no sla requirements
+> * 100% reliability
 > * Metrics and Monitoring
 > * Performance Profiling
 > * Availability as an online package for easy installation
@@ -29,14 +30,8 @@
 
 As a user, I want to be able to index files from dropbox in elasticsearch, so I can do fast content searching
 
-#### Requirements
-
-> To be updated
-
 #### Acceptance Testing
 
-> To be updated
+> Search by key terms using elasticsearch api, and retrieve files that contains those keys
 
-#### Documentation
 
-> To be updated
