@@ -1,0 +1,6 @@
+dropbox
+tika
+flask
+elasticsearch
+redis
+pika

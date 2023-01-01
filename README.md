@@ -3,22 +3,19 @@ Provides a functionality to search documents from DropBox using keywords
 
 **Requirements:**
 
-* Python >= 3.10
-  * Make sure necessary python libraries are installed 
-  `python3 -m pip install dropbox tika flask`
-* ELasticSearch Cluster >= 8.5
-* [DropBox api auth token](https://developers.dropbox.com/oauth-guide#:~:text=If%20you'd%20like%20to,of%20your%20app%20settings%20page.) 
+> * Python >= 3.10 
+> * ELasticSearch Cluster >= 8.5
+> * JDK >= 7.0 for tika. 
+> * [DropBox api auth token](https://developers.dropbox.com/oauth-guide#:~:text=If%20you'd%20like%20to,of%20your%20app%20settings%20page.) 
 
 **Usage:**
-
-* Invoke command to launch app using command `python file_finder.py`. You should see a scree
+* Create a virtual environment and activate it:  
+    * `python3 -m ~/testenv`
+    * `source ~/testenv/bin/activate`
+* Make sure necessary python libraries are installed 
+    * `pip3 install -r requirements.txt`
+* Invoke command to launch app using command `python file_finder.py`. 
 ```
-PS C:\Users\tapas\Desktop\DropBoxFileFinder> python .\dropboxconnector\file_finder.py 
- * Serving Flask app 'file_finder'
- * Debug mode: off
-2022-12-26 11:51:04,422 - INFO: WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-2022-12-26 11:51:04,422 - INFO: Press CTRL+C to quit
 ```
 
 **API Requests:**
