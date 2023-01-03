@@ -7,21 +7,22 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
-def extract_data_from_path(file_path):
+def extract_data_from_message(msg):
     """
     Extract text content and metadata from files using the apache tika library
 
     Args:
-        file_path (String): Path in local system pointing to the file
+        msg (String): Contents of the file in byte form
 
     Returns:
         results: A dictionary containing metadata,content and status of parsed file.
     """
-    results = parser.from_file(file_path)
-    logging.info("Parsing file %s", file_path)
+    logging.debug("Parsing to string %s")
+    # results = parser.from_buffer(base64.b64decode(msg["content"]))
+    logging.debug("Extracting data for file %s", msg["file_name"])
     return results
 

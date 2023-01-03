@@ -4,3 +4,4 @@ flask
 elasticsearch
 redis
 pika
+python-dotenv

@@ -7,7 +7,7 @@ import pika
 import redis
 from elasticsearch import Elasticsearch
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -18,21 +18,21 @@ def get_redis_connection(db_num=0):
     return redis_connection
 
 
-def get_elastic_search_client(host="localhost", port=9200):
+def get_elastic_search_connection(host="localhost", port=9200):
     """
     Args:
         host (str, optional): Elastic Search host. Defaults to "localhost".
         port (int, optional): Elastic Search port. Defaults to 9200.
     Returns:
-        es_client: Client to make requests to ElasticSearch cluster
+        es_conn: Client to make requests to ElasticSearch cluster
     """
-    es_client = Elasticsearch("http://{}:{}".format(host, port))
+    es_conn = Elasticsearch("http://{}:{}".format(host, port))
     try:
-        es_client.info().body
+        es_conn.info().body
     except Exception as e:
-        logging.critical("There was an error completing dbt command.")
+        logging.critical("There was an error setting up the elasticsearch connection.")
         sys.exit(10)
-    return es_client
+    return es_conn
 
 
 def get_dropbox_client(auth_token):
@@ -48,7 +48,7 @@ def get_dropbox_client(auth_token):
     # Validate the access token by making a test API call
     try:
         dbx_client.users_get_current_account()
-        logging.info("Dropbox access token is valid")
+        logging.debug("Dropbox access token is valid")
     except dropbox.exceptions.AuthError:
         logging.critical("Error: Invalid Dropbox access token")
         sys.exit(10)
