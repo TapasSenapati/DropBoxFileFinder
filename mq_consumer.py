@@ -9,7 +9,10 @@ from dropbox_finder.clientutils.client_helpers import (
     get_dropbox_client,
     get_rabbitmq_connection,
 )
-from dropbox_finder.elasticsearch.es_helper import add_doc_to_index, remove_doc_from_index
+from dropbox_finder.elasticsearch.es_helper import (
+    add_doc_to_index,
+    remove_doc_from_index,
+)
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
