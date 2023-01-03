@@ -50,4 +50,5 @@ def process_messages():
 
 # Create a new thread to start consuming messages from queue
 consumer_thread = threading.Thread(target=process_messages)
+consumer_thread.daemon = True
 consumer_thread.start()

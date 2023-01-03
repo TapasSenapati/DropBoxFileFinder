@@ -9,7 +9,7 @@ from dropbox_finder.clientutils.client_helpers import (
     get_rabbitmq_connection,
     get_redis_connection,
 )
-from dropbox_finder.messagequeue.mq_producer import add_message_for_processing
+from dropbox_finder.producer.mq_producer import add_message_for_processing
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
