@@ -11,7 +11,7 @@ from dropbox_finder.clientutils.client_helpers import (
 )
 from dropbox_finder.producer.mq_producer import add_message_for_processing
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -27,7 +27,7 @@ def update_message_queue(account):
 
     # OAuth token for the user
     token = redis_connection.hget("tokens", account)
-    logging.debug("auth token fetched %s", token)
+    logging.info("auth token fetched %s", token)
 
     # cursor for the user (None the first time)
     cursor = redis_connection.hget("cursors", account)
@@ -43,10 +43,11 @@ def update_message_queue(account):
                 result = dbx.files_list_folder_continue(cursor)
 
             for entry in result.entries:
-                logging.debug("Iterating file %s", entry.name)
+                logging.info("Iterating file %s", entry.name)
                 change_data = {}
                 # Name of modified file
-                change_data["file_name"] = entry.path_display
+                change_data["file_path"] = entry.path_lower
+                change_data["file_name"] = entry.name
 
                 # we are ignoring folder changes at this point of time
                 if isinstance(entry, dropbox.files.FolderMetadata):
@@ -58,7 +59,7 @@ def update_message_queue(account):
                     # update here could mean adding a new file or modifying an existing file in dropbox
                     change_data["change_type"] = "update"
                     # Time of modification in ISO 8601 format
-                    change_data["time_of_update"] = entry.server_modified
+                    # change_data["time_of_update"] = entry.server_modified
                 
                 add_message_for_processing(mq_connection, change_data)
 

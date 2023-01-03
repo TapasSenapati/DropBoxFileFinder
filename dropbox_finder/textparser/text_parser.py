@@ -7,7 +7,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -21,8 +21,8 @@ def extract_data_from_message(msg):
     Returns:
         results: A dictionary containing metadata,content and status of parsed file.
     """
-    logging.debug("Parsing to string %s")
+    logging.info("Parsing to string %s")
     # results = parser.from_buffer(base64.b64decode(msg["content"]))
-    logging.debug("Extracting data for file %s", msg["file_name"])
+    logging.info("Extracting data for file %s", msg["file_name"])
     return results
 

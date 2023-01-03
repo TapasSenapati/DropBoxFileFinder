@@ -7,7 +7,7 @@ import pika
 import redis
 from elasticsearch import Elasticsearch
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -48,7 +48,7 @@ def get_dropbox_client(auth_token):
     # Validate the access token by making a test API call
     try:
         dbx_client.users_get_current_account()
-        logging.debug("Dropbox access token is valid")
+        logging.info("Dropbox access token is valid")
     except dropbox.exceptions.AuthError:
         logging.critical("Error: Invalid Dropbox access token")
         sys.exit(10)

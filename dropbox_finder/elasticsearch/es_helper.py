@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 from flask import jsonify
 from dropbox_finder.clientutils.client_helpers import get_elastic_search_connection
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -31,7 +31,7 @@ def index_data():
     #         logging.critical("There was an error indexing all the files")
     #         return jsonify(e)
 
-    #     logging.debug("Indexing file %s", file)
+    #     logging.info("Indexing file %s", file)
 
-    # logging.debug("Done indexing all files in folder %s", local_path)
+    # logging.info("Done indexing all files in folder %s", local_path)
     # return jsonify(filesIndexed=files)

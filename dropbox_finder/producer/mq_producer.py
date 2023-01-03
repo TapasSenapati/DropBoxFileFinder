@@ -3,7 +3,7 @@ import logging
 import os
 
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "DEBUG").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
@@ -27,7 +27,7 @@ def add_message_for_processing(mq_connection, msg):
         routing_key="sync_files",
         body=json.dumps(msg, default=str),
     )
-    logging.debug(
+    logging.info(
         "Added msg for %s of %s to message queue", msg["change_type"], msg["file_name"]
     )
 
