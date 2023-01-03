@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import threading
 
 from dotenv import load_dotenv, find_dotenv
 from elasticsearch import Elasticsearch

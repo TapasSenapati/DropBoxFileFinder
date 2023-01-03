@@ -9,6 +9,7 @@ from dropbox_finder.clientutils.client_helpers import (
     get_dropbox_client,
     get_rabbitmq_connection,
 )
+from dropbox_finder.elasticsearch.es_helper import add_doc_to_index, remove_doc_from_index
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
@@ -38,12 +39,16 @@ def sync_files_from_dropbox(ch, method, properties, body):
         with open(local_file_path, "wb") as f:
             f.write(file_content)
 
+        # Update index in elasticsearch cluster
+        add_doc_to_index(local_file_path)
+
     elif msg["change_type"] == "delete":
         # remove the file from local storage
         logging.info("Deleting file")
         if os.path.exists(local_file_path):
             os.remove(local_file_path)
             logging.info("%s file has been removed from local storage", local_file_path)
+            remove_doc_from_index(local_file_path)
         else:
             logging.warning("The file does not exist")
 
