@@ -27,6 +27,7 @@
 > * Improve message consumption logic using multiple queues and threads.Add a dlq.
 > * Monitor and restart automatically when any of the system components crash. supervisord can be used.
 > * Add flask templates for better front end rendering, routing and usage
+> * Rate limiting and throttling user by dropbox account id
 
 ## Assumptions 
 
