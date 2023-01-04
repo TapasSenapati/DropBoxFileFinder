@@ -29,4 +29,4 @@ Using postman/curl or any suitable clients to make api requests
 
 **Architecture**
 
-![diagram](./architecture.jpg)
+![diagram](https://i.postimg.cc/qv37TCF9/architecture.jpg)
