@@ -17,7 +17,16 @@
 > * 100% reliability
 > * Metrics and Monitoring
 > * Performance Profiling
-> * Availability as an online package for easy installation
+
+## Future improvements
+> * Package application so that it can be uploaded to pypi or anaconda for easy download and installation
+> * Add metrics and alerting
+> * Add a oauth2.0 flow instead of fetching token through environment variables.
+> * Add a persistence layer to store intermediate results/processing metadata during file sync and indexing
+> * Persistence for logs and auto rotation
+> * Improve message consumption logic using multiple queues and threads.Add a dlq.
+> * Monitor and restart automatically when any of the system components crash. supervisord can be used.
+> * Add flask templates for better front end rendering, routing and usage
 
 ## Assumptions 
 
