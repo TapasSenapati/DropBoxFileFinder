@@ -1,9 +1,10 @@
 import logging
 import os
-from tika import parser
 
 # Import the library to avoid warnings
 import warnings
+
+from tika import parser
 
 warnings.filterwarnings("ignore")
 
@@ -11,7 +12,7 @@ LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(message)s")
 
 
-def extract_data_from_path(file_path):
+def extract_data_from_message(file_path):
     """
     Extract text content and metadata from files using the apache tika library
 
@@ -24,4 +25,3 @@ def extract_data_from_path(file_path):
     results = parser.from_file(file_path)
     logging.info("Parsing file %s", file_path)
     return results
-

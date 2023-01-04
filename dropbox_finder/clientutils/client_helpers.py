@@ -18,21 +18,21 @@ def get_redis_connection(db_num=0):
     return redis_connection
 
 
-def get_elastic_search_client(host="localhost", port=9200):
+def get_elastic_search_connection(host="localhost", port=9200):
     """
     Args:
         host (str, optional): Elastic Search host. Defaults to "localhost".
         port (int, optional): Elastic Search port. Defaults to 9200.
     Returns:
-        es_client: Client to make requests to ElasticSearch cluster
+        es_conn: Client to make requests to ElasticSearch cluster
     """
-    es_client = Elasticsearch("http://{}:{}".format(host, port))
+    es_conn = Elasticsearch("http://{}:{}".format(host, port))
     try:
-        es_client.info().body
+        es_conn.info().body
     except Exception as e:
-        logging.critical("There was an error completing dbt command.")
+        logging.critical("There was an error setting up the elasticsearch connection.")
         sys.exit(10)
-    return es_client
+    return es_conn
 
 
 def get_dropbox_client(auth_token):

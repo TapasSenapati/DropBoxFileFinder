@@ -2,11 +2,12 @@ import json
 import logging
 import os
 
+from dotenv import load_dotenv, find_dotenv
 from elasticsearch import Elasticsearch
-from flask import Flask, Response, jsonify, request
+from flask import Response, jsonify, request
 
 from dropbox_finder import app
-from dropbox_finder.elasticsearch.es_helper import index_data
+from dropbox_finder.clientutils.client_helpers import get_redis_connection
 from dropbox_finder.filesyncer.dropbox_syncer import update_message_queue
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
@@ -14,20 +15,23 @@ logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(messa
 
 
 @app.route("/")
+@app.route("/login")
 def main():
-    return "<h1 style='color:blue'>Hello There!</h1>"
+    # Extract and store the access token for this user
+    load_dotenv(find_dotenv())
+    ACCOUNT_ID = os.environ.get("ACCOUNT_ID")
+    ACCOUNT_TOKEN = os.environ.get("ACCOUNT_TOKEN")
+    logging.info("dbx acct id %s ", ACCOUNT_ID)
+    logging.info("dbx oauth token %s ", ACCOUNT_TOKEN)
+    redis_client = get_redis_connection()
+    redis_client.hset("tokens", ACCOUNT_ID, ACCOUNT_TOKEN)
+    redis_client.close()
+    return "<h1 style='color:blue'>Hello.Please refer to https://github.com/TapasSenapati/DropBoxFileFinder for usage!</h1>"
 
 
 @app.route("/sync")
 def sync():
-    local_path = request.args.get("local_path")
-    is_dir = os.path.isdir(local_path)
-    if not is_dir:
-        logging.critical("Not a valid local directory %s" + local_path)
-        return jsonify("Not a valid local path")
-    auth_token = request.args.get("auth_token")
-    dbx_client = create_client(auth_token)
-    # response = sync_files_from_dropbox(local_path, dbx_client)
+    update_message_queue(os.environ.get("ACCOUNT_ID"))
     return None
 
 
@@ -39,18 +43,6 @@ def search():
     # Get the IDs of the matching documents
     ids = [hit["_id"] for hit in results["hits"]["hits"]]
     return jsonify(ids)
-
-
-@app.route("/index")
-def index():
-    local_path = request.args.get("local_path")
-    is_dir = os.path.isdir(local_path)
-    if not is_dir:
-        logging.critical("Not a valid local directory %s" + local_path)
-        return jsonify("Not a valid local path")
-    response = index_data(local_path)
-    # Return list of files parsed and indexed and error if any
-    return response
 
 
 @app.route("/webhook", methods=["GET"])
