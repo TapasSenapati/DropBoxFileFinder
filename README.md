@@ -27,4 +27,6 @@ Using postman/curl or any suitable clients to make api requests
 
 * Example Search for keywords in all files `http://172.105.36.70/search?query="Architecture"`
 
+**Architecture**
 
+![diagram](architecture.png)
