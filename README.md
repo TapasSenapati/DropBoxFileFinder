@@ -29,4 +29,4 @@ Using postman/curl or any suitable clients to make api requests
 
 **Architecture**
 
-![diagram](https://github.com/TapasSenapati/DropBoxFileFinder/blob/main/architecture.jpg?raw=true)
+![diagram](https://i.postimg.cc/qv37TCF9/architecture.jpg)
