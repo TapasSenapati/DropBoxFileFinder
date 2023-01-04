@@ -26,7 +26,7 @@ def main():
     redis_client = get_redis_connection()
     redis_client.hset("tokens", ACCOUNT_ID, ACCOUNT_TOKEN)
     redis_client.close()
-    return "<h1 style='color:blue'>Hello.Please refer to https://github.com/TapasSenapati/DropBoxFileFinder for usage!</h1>"
+    return "<h1 style='color:blue'>Hello.Please refer to https://github.com/TapasSenapati/DropBoxFileFinder/blob/main/README.md for usage!</h1>"
 
 
 @app.route("/sync")

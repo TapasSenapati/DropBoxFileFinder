@@ -5,3 +5,4 @@ elasticsearch
 redis
 pika
 python-dotenv
+gunicorn
