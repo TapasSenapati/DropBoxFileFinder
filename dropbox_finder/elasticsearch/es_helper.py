@@ -1,8 +1,6 @@
-import json
 import logging
 import os
-from elasticsearch import Elasticsearch
-from flask import jsonify
+
 from dropbox_finder.clientutils.client_helpers import get_elastic_search_connection
 from dropbox_finder.textparser.text_parser import extract_data_from_message
 
@@ -11,8 +9,7 @@ logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s: %(messa
 
 
 def add_doc_to_index(local_path):
-    """Index/update document into elasticsearch cluster
-    """
+    """Index/update document into elasticsearch cluster"""
     # Connect to the Elasticsearch cluster
     es_client = get_elastic_search_connection()
     parsed = extract_data_from_message(local_path)
@@ -34,19 +31,19 @@ def add_doc_to_index(local_path):
     logging.info("Done Indexing file %s", file_name)
     es_client.close()
 
+
 def remove_doc_from_index(local_path):
-    """Remove document from elasticsearch cluster
-    """
+    """Remove document from elasticsearch cluster"""
     # Connect to the Elasticsearch cluster
     es_client = get_elastic_search_connection()
     file_name = os.path.basename(local_path)
 
     # Check if the document exists
-    if es_client.exists(index='test-index', id=file_name):
+    if es_client.exists(index="test-index", id=file_name):
         # Delete the document
-        res = es_client.delete(index='test-index', id=file_name)
+        res = es_client.delete(index="test-index", id=file_name)
     else:
-        logging.warning('File/Index does not exist')
-    
+        logging.warning("File/Index does not exist")
+
     logging.info("Done removing document %s from es cluster", file_name)
     es_client.close()

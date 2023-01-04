@@ -59,7 +59,7 @@ def sync_files_from_dropbox(ch, method, properties, body):
             logging.info("%s file has been removed from local storage", local_file_path)
             remove_doc_from_index(local_file_path)
         else:
-            logging.warning("The file does not exist")
+            logging.warning("The file does not exist %s", local_file_path)
 
     else:
         logging.warning("Invalid message put into queue")

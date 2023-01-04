@@ -1,9 +1,10 @@
 import logging
 import os
-from tika import parser
 
 # Import the library to avoid warnings
 import warnings
+
+from tika import parser
 
 warnings.filterwarnings("ignore")
 
@@ -24,4 +25,3 @@ def extract_data_from_message(file_path):
     results = parser.from_file(file_path)
     logging.info("Parsing file %s", file_path)
     return results
-

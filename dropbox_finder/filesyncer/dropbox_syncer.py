@@ -52,7 +52,7 @@ def update_message_queue(account):
                 # we are ignoring folder changes at this point of time
                 if isinstance(entry, dropbox.files.FolderMetadata):
                     continue
-                
+
                 if isinstance(entry, dropbox.files.DeletedMetadata):
                     change_data["change_type"] = "delete"
                 else:
@@ -60,7 +60,7 @@ def update_message_queue(account):
                     change_data["change_type"] = "update"
                     # File size in bytes
                     change_data["file_size"] = entry.size
-                
+
                 add_message_for_processing(mq_connection, change_data)
 
             # Update cursor
