@@ -56,10 +56,10 @@ def update_message_queue(account):
                 if isinstance(entry, dropbox.files.DeletedMetadata):
                     change_data["change_type"] = "delete"
                 else:
-                    # update here could mean adding a new file or modifying an existing file in dropbox
+                    # we have file meta data.update here could mean adding a new file or modifying an existing file in dropbox
                     change_data["change_type"] = "update"
-                    # Time of modification in ISO 8601 format
-                    # change_data["time_of_update"] = entry.server_modified
+                    # File size in bytes
+                    change_data["file_size"] = entry.size
                 
                 add_message_for_processing(mq_connection, change_data)
 

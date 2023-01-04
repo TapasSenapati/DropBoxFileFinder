@@ -28,19 +28,25 @@ def sync_files_from_dropbox(ch, method, properties, body):
     ACCOUNT_TOKEN = os.environ.get("ACCOUNT_TOKEN")
     dbx = get_dropbox_client(ACCOUNT_TOKEN)
 
-    local_file_path = os.path.join("/home/downloads", msg["file_name"])
+    LOCAL_PATH = os.environ.get("LOCAL_PATH")
+    local_file_path = os.path.join(LOCAL_PATH, msg["file_name"])
 
     if msg["change_type"] == "update":
-        # download the updated file contents from dropbox and store it locally.
-        try:
-            md, res = dbx.files_download(msg["file_path"])
-            logging.info("Downloading file %s", msg["file_name"])
-        except Exception as e:
-            logging.critical("Error while downloading %s ", e)
+        # download file in chunks if size if >= 1GB
+        if msg["file_size"] >= 1000000000:
+            sync_large_file(dbx, msg["file_path"], local_file_path)
+        else:
+            # download the updated file contents from dropbox and store it locally.
+            try:
+                # TODO: Implement files_download_session_start and files_download_session_finish for large files
+                md, res = dbx.files_download(msg["file_path"])
+                logging.info("Downloading file %s", msg["file_name"])
+            except Exception as e:
+                logging.critical("Error while downloading %s ", e)
 
-        file_content = res.content
-        with open(local_file_path, "wb") as f:
-            f.write(file_content)
+            file_content = res.content
+            with open(local_file_path, "wb") as f:
+                f.write(file_content)
 
         # Update index in elasticsearch cluster
         add_doc_to_index(local_file_path)
@@ -57,6 +63,39 @@ def sync_files_from_dropbox(ch, method, properties, body):
 
     else:
         logging.warning("Invalid message put into queue")
+
+    dbx.close()
+
+
+def sync_large_file(dbx_conn, dbx_path, local_path):
+    # Start a download session for the file
+    session_result = dbx_conn.files_download_session_start(dbx_path)
+
+    # Get the session ID and the cursor
+    session_id = session_result.session_id
+    cursor = dbx_conn.files.DownloadSessionCursor(session_id=session_id, offset=0)
+
+    # Set the chunk size
+    CHUNK_SIZE = 4 * 1024 * 1024
+
+    # Download the file in chunks
+    while True:
+        # Get the next chunk
+        chunk = dbx_conn.files_download_session_append_v2(cursor, CHUNK_SIZE)
+
+        # Write the chunk to a file
+        with open(local_path, "ab") as f:
+            f.write(chunk.data)
+
+        # Update the cursor
+        cursor.offset = chunk.offset
+
+        # If the download is complete, break out of the loop
+        if chunk.final:
+            break
+
+    # Finish the download session
+    dbx_conn.files_download_session_finish(cursor, dbx_path)
 
 
 def process_messages():
